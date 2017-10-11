@@ -1,0 +1,4 @@
+<resources>
+    <string name="error_on_load_images">Something went wrong. Please try again</string>
+    <string name="loading_images">Loading…</string>
+</resources>
