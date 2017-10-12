@@ -6,6 +6,9 @@ on Facebook or Instagram.
 
 This is still a work in progress. See [TODO](#todo)
 
+This library uses [GestureViews](https://github.com/alexvasilkov/GestureViews)
+for its photo viewer and wraps this for easy usage with a feed.
+
 This is roughly based on the `FeedCollectionViewController` library for Swift
 that you can find [here](https://github.com/oliveroneill/FeedCollectionViewController)
 
