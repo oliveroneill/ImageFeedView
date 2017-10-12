@@ -1,6 +1,30 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
+ext {
+    bintrayRepo = 'ImageFeedView'
+    bintrayName = 'ImageFeedView'
+
+    publishedGroupId = 'com.oliveroneill'
+    libraryName = 'ImageFeedView'
+    artifact = 'ImageFeedView'
+
+    libraryDescription = 'An android library for displaying Facebook/Instagram inspired feeds'
+
+    siteUrl = 'https://github.com/oliveroneill/imagefeedview'
+    gitUrl = 'https://github.com/oliveroneill/imagefeedview.git'
+
+    libraryVersion = '1.0.0'
+
+    developerId = 'oliveroneill'
+    developerName = "Oliver O'Neill"
+    developerEmail = 'oliveroneill@users.noreply.github.com'
+
+    licenseName = 'MIT License'
+    licenseUrl = 'https://raw.githubusercontent.com/oliveroneill/imagefeedview/master/LICENSE'
+    allLicenses = ["MIT"]
+}
+
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
@@ -45,3 +69,12 @@ dependencies {
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     testCompile "com.nhaarman:mockito-kotlin:1.5.0"
 }
+
+// Javadoc check must be disabled for Kotlin Bintray upload
+// see https://github.com/novoda/bintray-release/issues/71
+tasks.withType(Javadoc).all {
+    enabled = false
+}
+
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
