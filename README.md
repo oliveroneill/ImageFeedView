@@ -16,7 +16,7 @@ that you can find [here](https://github.com/oliveroneill/FeedCollectionViewContr
 
 ## Example
 
-To run the example project, clone the repo, and run the `app` configuration.
+To run the example project, clone the repo, and run the `sample` configuration.
 The example project demonstrates the functionality without using any actual content, it creates
 coloured images to illustrate its use with a large amount of content.
 
@@ -64,7 +64,7 @@ For custom grid items or photo viewers, use
 `setPagerAdapter(adapter : PhotoPagerAdapter<T>)`.
 
 ## Testing
-Testing is done through JUnit, these tests are located in the `imagefeedview`.
+Testing is done through JUnit, these tests are located in the `imagefeedview` project.
 
 ## Todo
 - Figure out why double tap breaks with data uri images when loaded a second time
@@ -80,4 +80,4 @@ Oliver O'Neill
 
 ## License
 
-imagefeedview is available under the MIT license. See the LICENSE file for more info.
+ImageFeedView is available under the MIT license. See the LICENSE file for more info.
