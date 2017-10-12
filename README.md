@@ -1,5 +1,7 @@
 # ImageFeedView
 
+[![Build Status](https://travis-ci.org/oliveroneill/imagefeedview.svg?branch=master)](https://travis-ci.org/oliveroneill/imagefeedview)
+
 A simple Android library for creating data feeds so that data can be loaded
 dynamically as the user scrolls. This is inspired by scrolling through photos
 on Facebook or Instagram.
