@@ -77,4 +77,4 @@ tasks.withType(Javadoc).all {
 }
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
+apply from: 'https://raw.githubusercontent.com/first087/JCenter/bugfix-travis-ci/bintrayv1.gradle'
