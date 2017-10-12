@@ -1,1 +1,1 @@
-include ':app', ':imagefeedview'
+include ':sample', ':imagefeedview'
