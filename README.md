@@ -5,6 +5,8 @@ dynamically as the user scrolls. This is inspired by scrolling through photos
 on Facebook or Instagram.
 
 This is still a work in progress. See [TODO](#todo)
+This is roughly based on the `FeedCollectionViewController` library for Swift
+that you can find [here](https://github.com/oliveroneill/FeedCollectionViewController)
 
 ## Example
 
