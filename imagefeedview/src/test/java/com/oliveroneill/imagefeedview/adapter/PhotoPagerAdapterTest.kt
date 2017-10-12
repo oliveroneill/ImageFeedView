@@ -13,9 +13,6 @@ import org.junit.Test
 import java.util.*
 import kotlin.collections.ArrayList
 
-/**
- * Created by Oliver O'Neill on 6/10/2017.
- */
 class PhotoPagerAdapterTest {
     val list = ArrayList(Arrays.asList("test123", "nvdjfn", "urlgoes here", "mock_value"))
     lateinit var adapter : PhotoPagerAdapter<String>

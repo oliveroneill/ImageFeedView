@@ -11,9 +11,6 @@ import org.junit.Test
 import java.util.*
 import kotlin.collections.ArrayList
 
-/**
- * Created by Oliver O'Neill on 6/10/2017.
- */
 class ImageFeedViewTest {
     val list = ArrayList(Arrays.asList("test123", "nvdjfn", "urlgoes here",
             "mock_value", "1", "2", "3", "4"))

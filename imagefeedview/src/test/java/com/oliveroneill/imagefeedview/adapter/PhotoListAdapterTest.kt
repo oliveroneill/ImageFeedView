@@ -11,9 +11,6 @@ import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Mockito.verify
 import java.util.*
 
-/**
- * Created by Oliver O'Neill on 29/09/2017.
- */
 class PhotoListAdapterTest {
     val list = ArrayList(Arrays.asList("test123", "nvdjfn", "urlgoes here", "mock_value"))
     lateinit var mockController : ImageFeedController<String>
