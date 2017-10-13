@@ -14,7 +14,7 @@ ext {
     siteUrl = 'https://github.com/oliveroneill/imagefeedview'
     gitUrl = 'https://github.com/oliveroneill/imagefeedview.git'
 
-    libraryVersion = android.defaultConfig.versionName
+    libraryVersion = '1.0.1'
 
     developerId = 'oliveroneill'
     developerName = "Oliver O'Neill"
@@ -34,7 +34,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
-        versionName '1.0.1'
+        versionName libraryVersion
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
