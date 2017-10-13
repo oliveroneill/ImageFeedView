@@ -7,14 +7,14 @@ ext {
 
     publishedGroupId = 'com.oliveroneill'
     libraryName = 'ImageFeedView'
-    artifact = 'ImageFeedView'
+    artifact = 'imagefeedview'
 
     libraryDescription = 'An android library for displaying Facebook/Instagram inspired feeds'
 
     siteUrl = 'https://github.com/oliveroneill/imagefeedview'
     gitUrl = 'https://github.com/oliveroneill/imagefeedview.git'
 
-    libraryVersion = '1.0.1'
+    libraryVersion = '1.0.2'
 
     developerId = 'oliveroneill'
     developerName = "Oliver O'Neill"
