@@ -21,7 +21,10 @@ The example project demonstrates the functionality without using any actual cont
 coloured images to illustrate its use with a large amount of content.
 
 ## Installation
-Through `build.gradle`, coming soon.
+Through `build.gradle`:
+```gradle
+compile 'com.oliveroneill:imagefeedview:1.0.2'
+```
 
 ## Usage
 
