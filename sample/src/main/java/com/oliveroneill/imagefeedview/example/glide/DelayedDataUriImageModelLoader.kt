@@ -15,15 +15,16 @@ import java.io.InputStream
 
 class DelayedDataUriImageModelLoader(val delayInSeconds:Double) : ModelLoader<DataUriImage, InputStream> {
     override fun buildLoadData(model: DataUriImage?, width: Int, height: Int, options: Options?): ModelLoader.LoadData<InputStream>? {
+        if (model == null) return null
         return ModelLoader.LoadData<InputStream>(
-                GlideUrl(model!!.url),
+                GlideUrl(model.url),
                 object : DataFetcher<InputStream> {
                     override fun loadData(priority: Priority?, callback: DataFetcher.DataCallback<in InputStream>?) {
                         bg {
                             Thread.sleep((delayInSeconds * 1000).toLong())
                             val dataUri = model.url
                             val base64 = dataUri.substring("data:img/png;base64,".length)
-                            callback!!.onDataReady(ByteArrayInputStream(Base64.decode(base64, Base64.DEFAULT)))
+                            callback?.onDataReady(ByteArrayInputStream(Base64.decode(base64, Base64.DEFAULT)))
                         }
                     }
 

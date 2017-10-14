@@ -11,7 +11,7 @@ import java.io.InputStream
 @GlideModule
 class DataUriGlideModule : AppGlideModule() {
     override fun registerComponents(context: Context?, glide: Glide?, registry: Registry?) {
-        registry!!.prepend(DataUriImage::class.java,
+        registry?.prepend(DataUriImage::class.java,
                 InputStream::class.java,
                 DelayedDataUriImageModelLoader.Factory(MainActivity.IMAGE_LOADING_DELAY)
         )
