@@ -67,7 +67,7 @@ dependencies {
     })
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    testCompile "com.nhaarman:mockito-kotlin:1.5.0"
+    testCompile "io.mockk:mockk:1.6"
 }
 
 // Javadoc check must be disabled for Kotlin Bintray upload
