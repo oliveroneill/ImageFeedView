@@ -3,12 +3,12 @@ package com.oliveroneill.imagefeedview.adapter
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
-import com.nhaarman.mockito_kotlin.*
 import com.oliveroneill.imagefeedview.ImageFeedController
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers.anyInt
-import org.mockito.Mockito.verify
 import java.util.*
 
 class PhotoListAdapterTest {
@@ -16,41 +16,39 @@ class PhotoListAdapterTest {
     lateinit var mockController : ImageFeedController<String>
     lateinit var adapter : PhotoListAdapter<String>
     lateinit var mockView : PhotoListAdapter.ViewHolder
-    lateinit var mockImageView : ImageView
 
     @Before
     fun setup() {
-        mockController = mock()
+        mockController = mockk(relaxed = true)
         adapter = PhotoListAdapter(list, mockController)
-        mockView = mock()
-        mockImageView = mock()
-        whenever(mockView.image).thenReturn(mockImageView)
+        mockView = mockk(relaxed = true)
     }
 
     @Test
     fun testOnClick() {
         val expectedClickPos = 2
-        val mockListener : PhotoListAdapter.OnPhotoListener = mock()
+        val mockListener : PhotoListAdapter.OnPhotoListener = mockk(relaxed = true)
         adapter.setListener(mockListener)
-        val mockView = mock<View> {
-            on {getTag(anyInt())} doReturn list[expectedClickPos]
-        }
+        val mockView = mockk<View>()
+        every {
+            mockView.getTag(any())
+        } returns list[expectedClickPos]
         adapter.onClick(mockView)
-        verify(mockListener).onPhotoClick(expectedClickPos)
+        verify { mockListener.onPhotoClick(expectedClickPos) }
     }
 
     @Test
     fun testOnBindHolder() {
         val position = 2
         adapter.onBindViewHolder(mockView, position)
-        verify(mockController).loadImage(eq(list[position]), eq(mockImageView), eq(null))
-        verify(mockImageView).setTag(anyInt(), eq(list[position]))
+        verify { mockController.loadImage(list[position], mockView.image, null) }
+        verify { mockView.image.setTag(any(), list[position]) }
     }
 
     @Test
     fun testOnViewRecycled() {
         adapter.onViewRecycled(mockView)
-        verify(mockController).recycleImage(eq(mockImageView))
+        verify { mockController.recycleImage(mockView.image) }
     }
 
     @Test
@@ -61,30 +59,24 @@ class PhotoListAdapterTest {
             override fun onLoadingStateChanged() {}
         }
         adapter = MockListAdapter()
-        mockView = mock()
-        whenever(mockView.image).thenReturn(mock())
-        val callbackMock : EndlessRecyclerAdapter.LoaderCallbacks = mock {
-            on {canLoadNextItems()} doReturn true
-            on {loadNextItems()} doAnswer {
-                adapter.onNextItemsLoaded()
-                null
-            }
-        }
+        mockView = mockk(relaxed = true)
+        val callbackMock : EndlessRecyclerAdapter.LoaderCallbacks = mockk()
+        every { callbackMock.canLoadNextItems() } returns true
+        every { callbackMock.loadNextItems() } answers { adapter.onNextItemsLoaded() }
+
         adapter.setCallbacks(callbackMock)
         adapter.setLoadingOffset(loadingOffset)
-        val recyclerView: RecyclerView = mock {
-            on {getChildAt(anyInt())} doReturn mock<View>()
-            on {getChildAdapterPosition(any())} doReturn list.size - loadingOffset + 1
-            on {post(any())} doAnswer {
-                val runnable = it.arguments[0] as Runnable
-                runnable.run()
-                null
-            }
+
+        val recyclerView: RecyclerView = mockk(relaxed = true)
+        every { recyclerView.getChildAdapterPosition(any()) } returns list.size - loadingOffset + 1
+        every { recyclerView.post(any()) } answers {
+            firstArg<Runnable>().run()
+            false
         }
         adapter.onAttachedToRecyclerView(recyclerView)
         // called once when setting callback and then again on attach
-        verify(callbackMock, times(2)).canLoadNextItems()
-        verify(callbackMock, times(2)).loadNextItems()
+        verify(exactly = 2) { callbackMock.canLoadNextItems() }
+        verify(exactly = 2) { callbackMock.loadNextItems() }
     }
 
     @Test
@@ -95,32 +87,25 @@ class PhotoListAdapterTest {
             override fun onLoadingStateChanged() {}
         }
         adapter = MockListAdapter()
-        mockView = mock()
-        whenever(mockView.image).thenReturn(mock())
+        mockView = mockk(relaxed = true)
         // will return false on canLoadNextItems
-        val callbackMock : EndlessRecyclerAdapter.LoaderCallbacks = mock {
-            on {canLoadNextItems()} doReturn false
-            on {loadNextItems()} doAnswer {
-                adapter.onNextItemsLoaded()
-                null
-            }
-        }
+        val callbackMock : EndlessRecyclerAdapter.LoaderCallbacks = mockk()
+        every { callbackMock.canLoadNextItems() } returns false
+        every { callbackMock.loadNextItems() } answers { adapter.onNextItemsLoaded() }
         adapter.setCallbacks(callbackMock)
         adapter.setLoadingOffset(loadingOffset)
-        val recyclerView: RecyclerView = mock {
-            on {getChildAt(anyInt())} doReturn mock<View>()
-            on {getChildAdapterPosition(any())} doReturn list.size - loadingOffset + 1
-            on {post(any())} doAnswer {
-                val runnable = it.arguments[0] as Runnable
-                runnable.run()
-                null
-            }
+        val recyclerView: RecyclerView = mockk(relaxed = true)
+        every { recyclerView.getChildAdapterPosition(any()) } returns list.size - loadingOffset + 1
+        every { recyclerView.post(any()) } answers {
+            firstArg<Runnable>().run()
+            false
         }
+
         adapter.onAttachedToRecyclerView(recyclerView)
         // called once when setting callback and then again on attach
-        verify(callbackMock, times(2)).canLoadNextItems()
+        verify(exactly = 2) { callbackMock.canLoadNextItems() }
         // never called due to canLoadNextItems being false
-        verify(callbackMock, never()).loadNextItems()
+        verify(exactly = 0) { callbackMock.loadNextItems() }
     }
 
     @Test
@@ -131,30 +116,22 @@ class PhotoListAdapterTest {
             override fun onLoadingStateChanged() {}
         }
         adapter = MockListAdapter()
-        mockView = mock()
-        whenever(mockView.image).thenReturn(mock())
-        val callbackMock : EndlessRecyclerAdapter.LoaderCallbacks = mock {
-            on {canLoadNextItems()} doReturn true
-            on {loadNextItems()} doAnswer {
-                adapter.onNextItemsLoaded()
-                null
-            }
-        }
+        mockView = mockk(relaxed = true)
+        val callbackMock : EndlessRecyclerAdapter.LoaderCallbacks = mockk()
+        every { callbackMock.canLoadNextItems() } returns true
+        every { callbackMock.loadNextItems() } answers { adapter.onNextItemsLoaded() }
         adapter.setCallbacks(callbackMock)
         adapter.setLoadingOffset(loadingOffset)
-        val recyclerView: RecyclerView = mock {
-            on {getChildAt(anyInt())} doReturn mock<View>()
-            on {getChildAdapterPosition(any())} doReturn list.size - loadingOffset - 1
-            on {post(any())} doAnswer {
-                val runnable = it.arguments[0] as Runnable
-                runnable.run()
-                null
-            }
+        val recyclerView: RecyclerView = mockk(relaxed = true)
+        every { recyclerView.getChildAdapterPosition(any()) } returns list.size - loadingOffset - 1
+        every { recyclerView.post(any()) } answers {
+            firstArg<Runnable>().run()
+            false
         }
         adapter.onAttachedToRecyclerView(recyclerView)
         // called once when setting callback but is not called again since we aren't at the end of
         // the scroll view
-        verify(callbackMock).canLoadNextItems()
-        verify(callbackMock).loadNextItems()
+        verify { callbackMock.canLoadNextItems() }
+        verify { callbackMock.loadNextItems() }
     }
 }

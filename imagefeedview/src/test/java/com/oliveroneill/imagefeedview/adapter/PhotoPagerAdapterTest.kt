@@ -1,13 +1,9 @@
 package com.oliveroneill.imagefeedview.adapter
 
-import com.alexvasilkov.gestures.GestureControllerForPager
-import com.alexvasilkov.gestures.Settings
 import com.alexvasilkov.gestures.views.GestureImageView
-import com.nhaarman.mockito_kotlin.eq
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
 import com.oliveroneill.imagefeedview.ImageFeedController
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
 import java.util.*
@@ -18,30 +14,23 @@ class PhotoPagerAdapterTest {
     lateinit var adapter : PhotoPagerAdapter<String>
     lateinit var mockController : ImageFeedController<String>
     lateinit var mockView : PhotoPagerAdapter.ViewHolder
-    lateinit var mockImageView : GestureImageView
     @Before
     fun setup() {
-        mockController = mock()
+        mockController = mockk(relaxed = true)
         adapter = PhotoPagerAdapter(list, mockController)
-        mockView = mock()
-        mockImageView = mock()
-        val mockGestureController = mock<GestureControllerForPager>()
-        val mockGestureSettings = mock<Settings>()
-        whenever(mockImageView.controller).thenReturn(mockGestureController)
-        whenever(mockImageView.controller.settings).thenReturn(mockGestureSettings)
-        whenever(mockView.image).thenReturn(mockImageView)
+        mockView = mockk(relaxed = true)
     }
 
     @Test
     fun testOnBindHolder() {
         val position = 2
         adapter.onBindViewHolder(mockView, position)
-        verify(mockController).loadImage(eq(list[position]), eq(mockImageView), eq(null))
+        verify { mockController.loadImage(list[position], mockView.image, null) }
     }
 
     @Test
     fun testOnViewRecycled() {
         adapter.onRecycleViewHolder(mockView)
-        verify(mockController).recycleImage(eq(mockImageView))
+        verify { mockController.recycleImage(mockView.image) }
     }
 }

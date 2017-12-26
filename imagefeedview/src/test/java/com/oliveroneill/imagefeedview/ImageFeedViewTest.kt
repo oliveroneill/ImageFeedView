@@ -1,11 +1,9 @@
 package com.oliveroneill.imagefeedview
 
-import com.nhaarman.mockito_kotlin.eq
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.times
-import com.nhaarman.mockito_kotlin.verify
 import com.oliveroneill.imagefeedview.adapter.PhotoListAdapter
 import com.oliveroneill.imagefeedview.adapter.PhotoPagerAdapter
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
 import java.util.*
@@ -20,14 +18,14 @@ class ImageFeedViewTest {
 
     @Before
     fun setup() {
-        mockGrid = mock()
-        mockPager = mock()
-        feed = ImageFeedView(mock())
-        feed.setGridAdapter(mockGrid, mock())
-        feed.setPagerAdapter(mockPager, mock())
-        feed.initGridAdapter(mock(), 3)
-        feed.initPagerAdapter(mock())
-        feed.setSwipeRefresh(mock())
+        mockGrid = mockk(relaxed = true)
+        mockPager = mockk(relaxed = true)
+        feed = ImageFeedView(mockk(relaxed = true))
+        feed.setGridAdapter(mockGrid, mockk(relaxed = true))
+        feed.setPagerAdapter(mockPager, mockk(relaxed = true))
+        feed.initGridAdapter(mockk(relaxed = true), 3)
+        feed.initPagerAdapter(mockk(relaxed = true))
+        feed.setSwipeRefresh(mockk(relaxed = true))
     }
 
     @Test
@@ -40,17 +38,17 @@ class ImageFeedViewTest {
             }
         })
         feed.onPageChange(list.size - 6)
-        verify(mockGrid, times(1)).insert(eq(list))
-        verify(mockPager, times(1)).insert(eq(list))
-        verify(mockGrid, times(1)).onNextItemsLoaded()
+        verify(exactly = 1) { mockGrid.insert(list) }
+        verify(exactly = 1) { mockPager.insert(list) }
+        verify(exactly = 1) { mockGrid.onNextItemsLoaded() }
     }
 
     @Test
     fun testOnPageChangeTriggersLoadMoreWithLessThanFiveImages() {
         val list = ArrayList(Arrays.asList("test123", "nvdjfn", "urlgoes here"))
         feed.insert(list)
-        verify(mockGrid).insert(eq(list))
-        verify(mockPager).insert(eq(list))
+        verify { mockGrid.insert(list) }
+        verify { mockPager.insert(list) }
         val expected = ArrayList(Arrays.asList("new", "n32", "new3"))
         feed.setFeedLoader(object : ImageListLoader<String> {
             override fun getMoreImages(callback: (newImages: List<String>) -> Unit) {
@@ -61,16 +59,16 @@ class ImageFeedViewTest {
         feed.onPageChange(list.size - 2)
         // this will trigger another load
         feed.onPageChange(list.size - 1)
-        verify(mockGrid).insert(eq(expected))
-        verify(mockPager).insert(eq(expected))
-        verify(mockGrid, times(2)).onNextItemsLoaded()
+        verify { mockGrid.insert(expected) }
+        verify { mockPager.insert(expected) }
+        verify(exactly = 2) { mockGrid.onNextItemsLoaded() }
     }
 
     @Test
     fun testOnPageChangeTriggersLoadMore() {
         feed.insert(list)
-        verify(mockGrid).insert(eq(list))
-        verify(mockPager).insert(eq(list))
+        verify { mockGrid.insert(list) }
+        verify { mockPager.insert(list) }
         val expected = ArrayList(Arrays.asList("new", "n32", "new3"))
         feed.setFeedLoader(object : ImageListLoader<String> {
             override fun getMoreImages(callback: (newImages: List<String>) -> Unit) {
@@ -78,9 +76,9 @@ class ImageFeedViewTest {
             }
         })
         feed.onPageChange(list.size - 4)
-        verify(mockGrid).insert(eq(expected))
-        verify(mockPager).insert(eq(expected))
-        verify(mockGrid, times(2)).onNextItemsLoaded()
+        verify { mockGrid.insert(expected) }
+        verify { mockPager.insert(expected) }
+        verify(exactly = 2) { mockGrid.onNextItemsLoaded() }
     }
 
     @Test
@@ -92,15 +90,15 @@ class ImageFeedViewTest {
             }
         })
         feed.loadMore()
-        verify(mockGrid).insert(eq(expected))
-        verify(mockPager).insert(eq(expected))
-        verify(mockGrid).onNextItemsLoaded()
+        verify { mockGrid.insert(expected) }
+        verify { mockPager.insert(expected) }
+        verify { mockGrid.onNextItemsLoaded() }
     }
 
     @Test
     fun testRefresh() {
         val expected = ArrayList(Arrays.asList("new", "n32", "new3"))
-        val mockController : ImageFeedController<String> = mock()
+        val mockController : ImageFeedController<String> = mockk(relaxed = true)
         feed.setFeedLoader(object : ImageListLoader<String> {
             override fun getMoreImages(callback: (newImages: List<String>) -> Unit) {
                 callback(expected)
@@ -108,19 +106,20 @@ class ImageFeedViewTest {
         })
         feed.setController(mockController)
         feed.refresh()
-        verify(mockController).clear()
-        verify(mockGrid).clear()
-        verify(mockPager).clear()
-        verify(mockGrid).insert(eq(expected))
-        verify(mockPager).insert(eq(expected))
-        verify(mockGrid).onNextItemsLoaded()
+        verify { mockController.clear() }
+        verify { mockGrid.clear() }
+        verify { mockGrid.clear() }
+        verify { mockPager.clear() }
+        verify { mockGrid.insert(expected) }
+        verify { mockPager.insert(expected) }
+        verify { mockGrid.onNextItemsLoaded() }
     }
 
     @Test
     fun testInsert() {
         feed.insert(list)
-        verify(mockGrid).insert(eq(list))
-        verify(mockPager).insert(eq(list))
-        verify(mockGrid).onNextItemsLoaded()
+        verify { mockGrid.insert(list) }
+        verify { mockPager.insert(list) }
+        verify { mockGrid.onNextItemsLoaded() }
     }
 }
