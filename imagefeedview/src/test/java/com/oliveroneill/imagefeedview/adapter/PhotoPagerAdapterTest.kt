@@ -1,6 +1,5 @@
 package com.oliveroneill.imagefeedview.adapter
 
-import com.alexvasilkov.gestures.views.GestureImageView
 import com.oliveroneill.imagefeedview.ImageFeedController
 import io.mockk.mockk
 import io.mockk.verify
@@ -23,14 +22,19 @@ class PhotoPagerAdapterTest {
 
     @Test
     fun testOnBindHolder() {
+        // Given
         val position = 2
+        // When
         adapter.onBindViewHolder(mockView, position)
+        // Then
         verify { mockController.loadImage(list[position], mockView.image, null) }
     }
 
     @Test
     fun testOnViewRecycled() {
+        // When
         adapter.onRecycleViewHolder(mockView)
+        // Then
         verify { mockController.recycleImage(mockView.image) }
     }
 }

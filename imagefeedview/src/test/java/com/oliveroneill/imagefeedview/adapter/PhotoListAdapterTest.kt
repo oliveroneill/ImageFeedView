@@ -2,7 +2,6 @@ package com.oliveroneill.imagefeedview.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.widget.ImageView
 import com.oliveroneill.imagefeedview.ImageFeedController
 import io.mockk.every
 import io.mockk.mockk
@@ -26,6 +25,7 @@ class PhotoListAdapterTest {
 
     @Test
     fun testOnClick() {
+        // Given
         val expectedClickPos = 2
         val mockListener : PhotoListAdapter.OnPhotoListener = mockk(relaxed = true)
         adapter.setListener(mockListener)
@@ -33,26 +33,34 @@ class PhotoListAdapterTest {
         every {
             mockView.getTag(any())
         } returns list[expectedClickPos]
+        // When
         adapter.onClick(mockView)
+        // Then
         verify { mockListener.onPhotoClick(expectedClickPos) }
     }
 
     @Test
     fun testOnBindHolder() {
+        // Given
         val position = 2
+        // When
         adapter.onBindViewHolder(mockView, position)
+        // Then
         verify { mockController.loadImage(list[position], mockView.image, null) }
         verify { mockView.image.setTag(any(), list[position]) }
     }
 
     @Test
     fun testOnViewRecycled() {
+        // When
         adapter.onViewRecycled(mockView)
+        // Then
         verify { mockController.recycleImage(mockView.image) }
     }
 
     @Test
     fun testOnAttachedToRecyclerViewLoadsMore() {
+        // Given
         val loadingOffset = 2
         // Mock adapter so that real RecyclerView methods are not called
         class MockListAdapter : PhotoListAdapter<String>(list, mockController) {
@@ -73,7 +81,9 @@ class PhotoListAdapterTest {
             firstArg<Runnable>().run()
             false
         }
+        // When
         adapter.onAttachedToRecyclerView(recyclerView)
+        // Then
         // called once when setting callback and then again on attach
         verify(exactly = 2) { callbackMock.canLoadNextItems() }
         verify(exactly = 2) { callbackMock.loadNextItems() }
@@ -81,6 +91,7 @@ class PhotoListAdapterTest {
 
     @Test
     fun testOnAttachedToRecyclerViewLoadsMoreChecksCanLoad() {
+        // Given
         val loadingOffset = 2
         // Mock adapter so that real RecyclerView methods are not called
         class MockListAdapter : PhotoListAdapter<String>(list, mockController) {
@@ -100,8 +111,9 @@ class PhotoListAdapterTest {
             firstArg<Runnable>().run()
             false
         }
-
+        // When
         adapter.onAttachedToRecyclerView(recyclerView)
+        // Then
         // called once when setting callback and then again on attach
         verify(exactly = 2) { callbackMock.canLoadNextItems() }
         // never called due to canLoadNextItems being false
@@ -110,6 +122,7 @@ class PhotoListAdapterTest {
 
     @Test
     fun testOnAttachedToRecyclerViewUnderLoadOffset() {
+        // Given
         val loadingOffset = 2
         // Mock adapter so that real RecyclerView methods are not called
         class MockListAdapter : PhotoListAdapter<String>(list, mockController) {
@@ -128,7 +141,9 @@ class PhotoListAdapterTest {
             firstArg<Runnable>().run()
             false
         }
+        // When
         adapter.onAttachedToRecyclerView(recyclerView)
+        // Then
         // called once when setting callback but is not called again since we aren't at the end of
         // the scroll view
         verify { callbackMock.canLoadNextItems() }
