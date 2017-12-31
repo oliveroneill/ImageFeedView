@@ -1,4 +1,4 @@
 package com.oliveroneill.imagefeedview.example
 
-class ExampleImage(val url: String) {
+data class ExampleImage(val url: String) {
 }
