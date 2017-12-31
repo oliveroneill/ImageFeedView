@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(), ImageFeedController<ExampleImage> {
         return list
     }
 
-    private fun generateDataUrl(color:Int) : String {
+    private fun generateDataUrl(color: Int): String {
         val width = 100
         val height = 100
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
@@ -66,9 +66,8 @@ class MainActivity : AppCompatActivity(), ImageFeedController<ExampleImage> {
         return "data:img/png;base64," + Base64.encodeToString(byteArray, Base64.DEFAULT)
     }
 
-    override fun loadImage(item: ExampleImage, imgView:ImageView, listener: LoadListener?) {
+    override fun loadImage(item: ExampleImage, imgView: ImageView, listener: LoadListener?) {
         Glide.with(this)
-//                .load("https://farm6.staticflickr.com/5568/14492969467_b2d25fd86f.jpg")
                 .load(DataUriImage(item.url))
                 .into(imgView)
     }
