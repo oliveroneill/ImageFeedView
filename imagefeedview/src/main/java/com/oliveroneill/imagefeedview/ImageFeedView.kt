@@ -59,6 +59,12 @@ open class ImageFeedView<T> : LinearLayout, ViewPositionAnimator.PositionUpdateL
     private lateinit var animator: ViewsTransitionAnimator<Int>
     private lateinit var pagerToolbar : Toolbar
 
+    private var pageChangeListener: OnPageChangeListener? = null
+
+    interface OnPageChangeListener {
+        fun onPageChange(position: Int)
+    }
+
     constructor(ctx: Context) : super(ctx)
     constructor(ctx: Context, attrs: AttributeSet) : super(ctx, attrs)
 
@@ -226,6 +232,10 @@ open class ImageFeedView<T> : LinearLayout, ViewPositionAnimator.PositionUpdateL
         }
     }
 
+    fun setOnPageChangeListener(listener: OnPageChangeListener) {
+        pageChangeListener = listener
+    }
+
     internal fun onPageChange(position: Int) {
         // Check whether we are at the last five images, or at the end of the list
         if (((position > collectionSize - 5) && collectionSize > lastLoadedIndex + 5) ||
@@ -233,6 +243,7 @@ open class ImageFeedView<T> : LinearLayout, ViewPositionAnimator.PositionUpdateL
             lastLoadedIndex = position
             loadMore()
         }
+        pageChangeListener?.onPageChange(position)
     }
 
     internal fun loadMore() {
